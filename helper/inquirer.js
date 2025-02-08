@@ -42,9 +42,9 @@ const questions = [
 const inquireMenu = async () => {
     console.clear();
 
-    console.log('=========================='.green);
-    console.log('   Select an option'.green);
-    console.log('==========================\n'.green);
+    console.log('=========================='.white);
+    console.log('   Select an option'.white);
+    console.log('==========================\n'.white);
 
     const prompt = inquirer.createPromptModule();
     const { option } = await prompt(questions);

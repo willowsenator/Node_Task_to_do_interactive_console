@@ -1,10 +1,16 @@
 require('colors');
-const {pause, inquireMenu, readInput} = require('./helper/inquirer');
+const { pause, inquireMenu, readInput } = require('./helper/inquirer');
+const {saveDB, readDB} = require('./helper/dbTools');
 const Tasks = require('./models/tasks');
 
-const main = async() => {
+const main = async () => {
     let option = '';
     const tasks = new Tasks();
+    const dbTasks = readDB();
+    console.log(dbTasks);
+    if (dbTasks) {
+       tasks.loadTasksFromArray(dbTasks);
+    }
 
     do {
         option = await inquireMenu();
@@ -14,11 +20,19 @@ const main = async() => {
                 tasks.createTask(description);
                 break;
             case '2':
-               console.log(tasks._list);
+                tasks.completeList();
+                break;
+            case '3':
+                tasks.listPendingCompletedTasks();
+                break;
+            case '4':
+                tasks.listPendingCompletedTasks(false);
                 break;
         }
 
-      if (option !== '0') await pause();
+        saveDB(tasks.listArr);
+
+        if (option !== '0') await pause();
     } while (option !== '0');
 }
 
