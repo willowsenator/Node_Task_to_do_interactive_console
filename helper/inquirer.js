@@ -124,10 +124,34 @@ const listTasksToDelete = async (tasks = []) => {
     return id;
 }
 
+const showCheckList = async (tasks = []) => {
+    const choices = tasks.map((task, i) => {
+        const idx = `${i + 1}.`.green;
+        return {
+            value: task.id,
+            name: `${idx} ${task.description}`,
+            checked: (task.completedDate) ? true : false
+        }
+    });
+
+    const question = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Select',
+            choices
+        }
+    ]
+    const prompt = inquirer.createPromptModule();
+    const { ids } = await prompt(question);
+    return ids;
+}
+
 module.exports = {
     inquireMenu,
     pause,
     readInput,
     listTasksToDelete,
-    confirm
+    confirm,
+    showCheckList
 }
