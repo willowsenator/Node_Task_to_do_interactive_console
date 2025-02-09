@@ -83,8 +83,51 @@ const readInput = async (message) => {
     return desc;
 }
 
+const confirm = async (message) => {
+    const prompt = inquirer.createPromptModule();
+    const question = [
+        {
+            type: 'confirm',
+            name: 'ok',
+            message
+        }
+    ]
+    const { ok } = await prompt(question);
+    return ok;
+}
+
+const listTasksToDelete = async (tasks = []) => {
+    const choices = tasks.map((task, i) => {
+        const idx = `${i + 1}.`.green;
+        return {
+            value: task.id,
+            name: `${idx} ${task.description}`
+        }
+    });
+
+    choices.unshift({
+        value: '0',
+        name: '0.'.green + ' Cancel'
+    });
+
+    const questions = [
+        {
+            type: 'list',
+            name: 'id',
+            message: 'Delete',
+            choices
+        }
+    ]
+    const prompt = inquirer.createPromptModule();
+
+    const { id } = await prompt(questions);
+    return id;
+}
+
 module.exports = {
     inquireMenu,
     pause,
-    readInput
+    readInput,
+    listTasksToDelete,
+    confirm
 }
